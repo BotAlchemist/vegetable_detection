@@ -37,10 +37,11 @@ loaded_model= load_model(filename)
 
 tab1, tab2= st.tabs(['Upload Image', 'Open Camera'])
 with tab1:
-    img_file_buffer = st.file_uploader("Upload Images", type=["png","jpg","jpeg"])
-    image= Image.open(img_file_buffer)
+    img_file_buffer = st.file_uploader("Upload Image", type=["png","jpg","jpeg"])
+    
     
     if img_file_buffer is not None:
+        image= Image.open(img_file_buffer)
         st.image(image,width=200)
        
         
@@ -64,6 +65,8 @@ with tab1:
         predicted_confidence= prediction[index]
         st.subheader(CLASS_NAMES[index])
         st.write("Confidence: ", predicted_confidence, " %")
+
+
 with tab2:
     cam_file_buffer = st.camera_input("Take a picture")
     if cam_file_buffer is not None:

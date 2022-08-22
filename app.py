@@ -48,12 +48,9 @@ with tab1:
         #img= img.resize((IMAGE_SIZE*IMAGE_SIZE))#
         image.save("Unseen/test.jpg")
         
-        all_files= glob.glob("Unseen/*")
         
-        X_unseen=[]
-        for i_ in all_files:
-            image=  tf.keras.preprocessing.image.load_img(
-                path= i_,
+        image=  tf.keras.preprocessing.image.load_img(
+                path= r'Unseen/test.jpg',
                 target_size=(IMAGE_SIZE,IMAGE_SIZE),
                 )
             
@@ -68,7 +65,25 @@ with tab1:
         st.subheader(CLASS_NAMES[index])
         st.write("Confidence: ", predicted_confidence, " %")
 with tab2:
-    img_file_buffer = st.camera_input("Take a picture")
+    cam_file_buffer = st.camera_input("Take a picture")
+    if cam_file_buffer is not None:
+        img = Image.open(cam_file_buffer)
+        img.save("Unseen/cam.jpg")
+        
+        cam_image=  tf.keras.preprocessing.image.load_img(
+                path= r'Unseen/cam.jpg',
+                target_size=(IMAGE_SIZE,IMAGE_SIZE),
+                )
+        
+        image= np.array(cam_image)
+        img_batch = np.expand_dims(image, 0)
+        prediction= loaded_model.predict(img_batch)
+        prediction= prediction[0]
+        index= np.argmax(prediction)
+        predicted_label= CLASS_NAMES[index]
+        predicted_confidence= prediction[index]
+        st.subheader(CLASS_NAMES[index])
+        st.write("Confidence: ", predicted_confidence, " %")
 
 
     

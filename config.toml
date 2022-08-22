@@ -138,9 +138,10 @@ keyPrefix = ""
 
 [theme]
 base="dark"
-primaryColor="#249a34"
-backgroundColor="#17160e"
-secondaryBackgroundColor="#37292d"
+primaryColor="#2e6f1e"
+backgroundColor="#17140e"
+secondaryBackgroundColor="#2d3118"
+
 
 
 

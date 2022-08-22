@@ -6,11 +6,15 @@ Created on Fri Aug 19 18:56:55 2022
 """
 
 import streamlit as st
+from streamlit_option_menu import option_menu
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
-import glob
+
+
+st.set_page_config(layout='wide',page_title="Veggies Detector")
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 
 IMAGE_SIZE=200
@@ -32,61 +36,87 @@ CLASS_NAMES= ['Bean',
  'Radish',
  'Tomato']
 
-# load model
-loaded_model= load_model(filename)
 
-tab1, tab2= st.tabs(['Upload Image', 'Open Camera'])
-with tab1:
-    img_file_buffer = st.file_uploader("Upload Image", type=["png","jpg","jpeg"])
+
+img_banner = Image.open(r'icons/icon.jpg')
+
+st.sidebar.image(img_banner)
+
+with st.sidebar:
+    i_page= option_menu('Veggies Detector', ['Home',  'Detector'],
+                        default_index=0, icons=['house', 'search' ], menu_icon= 'cast')
+
+st.sidebar.markdown("##### Developed by: Sumit Srivastava")
+
+if i_page == 'Home':
+    st.markdown("## Introduction")
+    st.write(''' 
+             The objective of this app is to perform real time detection of vegetables.
+             User can upload the picture of the vegetable or click the picture via their camera.
+             
+             Vegetable images were taken from Kaggle: https://www.kaggle.com/code/darkalchemist/cnn-model-vegetables/data.
+             In this dataset there were 21000 images from 15 classes, where each class contains a total of 1400 images.
+             ''')
+    st.markdown("---")        
+    st.markdown("##### Find code on GitHub: https://github.com/BotAlchemist/vegetable_detection")
     
+
+elif i_page== 'Detector':
+    # load model
+    loaded_model= load_model(filename)
     
-    if img_file_buffer is not None:
-        image= Image.open(img_file_buffer)
-        st.image(image,width=200)
-       
+    tab1, tab2= st.tabs(['Upload Image', 'Open Camera'])
+    with tab1:
+        img_file_buffer = st.file_uploader("Upload Image", type=["png","jpg","jpeg"])
         
         
-        #img= img.resize((IMAGE_SIZE*IMAGE_SIZE))#
-        image.save("Unseen/test.jpg")
-        
-        
-        image=  tf.keras.preprocessing.image.load_img(
-                path= r'Unseen/test.jpg',
-                target_size=(IMAGE_SIZE,IMAGE_SIZE),
-                )
+        if img_file_buffer is not None:
+            image= Image.open(img_file_buffer)
+            st.image(image,width=200)
+           
             
-       
-        image= np.array(image)
-        img_batch = np.expand_dims(image, 0)
-        prediction= loaded_model.predict(img_batch)
-        prediction= prediction[0]
-        index= np.argmax(prediction)
-        predicted_label= CLASS_NAMES[index]
-        predicted_confidence= prediction[index]
-        st.subheader(CLASS_NAMES[index])
-        st.write("Confidence: ", predicted_confidence, " %")
-
-
-with tab2:
-    cam_file_buffer = st.camera_input("Take a picture")
-    if cam_file_buffer is not None:
-        img = Image.open(cam_file_buffer)
-        img.save("Unseen/cam.jpg")
-        
-        cam_image=  tf.keras.preprocessing.image.load_img(
-                path= r'Unseen/cam.jpg',
-                target_size=(IMAGE_SIZE,IMAGE_SIZE),
-                )
-        
-        image= np.array(cam_image)
-        img_batch = np.expand_dims(image, 0)
-        prediction= loaded_model.predict(img_batch)
-        prediction= prediction[0]
-        index= np.argmax(prediction)
-        predicted_label= CLASS_NAMES[index]
-        predicted_confidence= prediction[index]
-        st.subheader(CLASS_NAMES[index])
-        st.write("Confidence: ", predicted_confidence, " %")
+            
+            #img= img.resize((IMAGE_SIZE*IMAGE_SIZE))#
+            image.save("Unseen/test.jpg")
+            
+            
+            image=  tf.keras.preprocessing.image.load_img(
+                    path= r'Unseen/test.jpg',
+                    target_size=(IMAGE_SIZE,IMAGE_SIZE),
+                    )
+                
+           
+            image= np.array(image)
+            img_batch = np.expand_dims(image, 0)
+            prediction= loaded_model.predict(img_batch)
+            prediction= prediction[0]
+            index= np.argmax(prediction)
+            predicted_label= CLASS_NAMES[index]
+            predicted_confidence= prediction[index]
+            st.subheader("Probably a " +  CLASS_NAMES[index])
+            st.markdown("##### Confidence: "+ str(predicted_confidence*100) + " %")
+    
+    
+    with tab2:
+        cam_file_buffer = st.camera_input("Take a picture")
+        if cam_file_buffer is not None:
+            img = Image.open(cam_file_buffer)
+            img.save("Unseen/cam.jpg")
+            
+            cam_image=  tf.keras.preprocessing.image.load_img(
+                    path= r'Unseen/cam.jpg',
+                    target_size=(IMAGE_SIZE,IMAGE_SIZE),
+                    )
+            
+            image= np.array(cam_image)
+            img_batch = np.expand_dims(image, 0)
+            prediction= loaded_model.predict(img_batch)
+            prediction= prediction[0]
+            index= np.argmax(prediction)
+            predicted_label= CLASS_NAMES[index]
+            predicted_confidence= prediction[index]
+            st.subheader("Probably a " +  CLASS_NAMES[index])
+            st.markdown("##### Confidence: "+ str(predicted_confidence*100) + " %")
 
 
     

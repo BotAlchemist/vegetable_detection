@@ -5,6 +5,8 @@ The objective of this app is to perform real time detection of vegetables. User 
 Vegetable images were taken from Kaggle: https://www.kaggle.com/code/darkalchemist/cnn-model-vegetables/data. 
 In this dataset there were 21000 images from 15 classes, where each class contains a total of 1400 images.
 
+## Deployed at: https://botalchemist-vegetable-detection-app-vthfkr.streamlitapp.com/
+
 ## Demo
 
 ##### Demo showing the results based on real time camera capture on mobile. 

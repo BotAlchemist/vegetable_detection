@@ -13,8 +13,22 @@ from PIL import Image
 import numpy as np
 
 
-st.set_page_config(layout='wide',page_title="Veggies Detector")
+
+img_favicon = Image.open(r'icons/favicon.jpg')
+
+
+st.set_page_config(layout='wide',page_title="Veggies Detector", page_icon = img_favicon)
 st.set_option('deprecation.showPyplotGlobalUse', False)
+
+#st.beta_set_page_config(page_title='your_title', page_icon = favicon, layout = 'wide', initial_sidebar_state = 'auto')
+# favicon being an object of the same kind as the one you should provide st.image() with (ie. a PIL array for example) or a string (url or local file path)
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 
 IMAGE_SIZE=200

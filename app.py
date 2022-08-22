@@ -14,10 +14,10 @@ import numpy as np
 
 
 
+img_favicon = Image.open('icons/favicon.JPG')
 
 
-
-st.set_page_config(layout='wide',page_title="Veggies Detector")
+st.set_page_config(layout='wide',page_title="Veggies Detector", page_icon = img_favicon)
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 #st.beta_set_page_config(page_title='your_title', page_icon = favicon, layout = 'wide', initial_sidebar_state = 'auto')
@@ -52,7 +52,7 @@ CLASS_NAMES= ['Bean',
 
 
 
-img_banner = Image.open(r'icons/icon.jpg')
+img_banner = Image.open('icons/icon.JPG')
 
 st.sidebar.image(img_banner)
 
